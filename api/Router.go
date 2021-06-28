@@ -34,5 +34,5 @@ func (r MuxRouter) Init() {
 		_, _ = writer.Write(b)
 	})
 
-	r.Router.Path("/devtron/telemetry/apikey").HandlerFunc(r.restHandler.GetApiKey).Methods("POST")
+	r.Router.Path("/devtron/telemetry/apikey").HandlerFunc(r.restHandler.GetApiKey).Methods("GET")
 }
