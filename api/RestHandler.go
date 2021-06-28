@@ -69,6 +69,7 @@ type ResetRequest struct {
 func (impl *RestHandlerImpl) GetApiKey(w http.ResponseWriter, r *http.Request) {
 
 	//TODO - authentication
+	setupResponse(&w, r)
 
 	result, err := impl.telemetryEventService.GetByAPIKey()
 	if err != nil {
@@ -77,4 +78,11 @@ func (impl *RestHandlerImpl) GetApiKey(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	impl.writeJsonResp(w, err, result, 200)
+}
+
+func setupResponse(w *http.ResponseWriter, req *http.Request) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	(*w).Header().Set("Content-Type", "text/html; charset=utf-8")
 }
