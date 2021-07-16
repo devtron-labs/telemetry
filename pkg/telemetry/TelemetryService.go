@@ -12,6 +12,8 @@ type TelemetryService interface {
 	CheckWhitelist(ucid string) (bool, error)
 }
 
+const devtronUCIDPrefix = "devtron"
+
 type TelemetryServiceImpl struct {
 	logger        *zap.SugaredLogger
 	client        *http.Client
@@ -35,7 +37,7 @@ func (impl *TelemetryServiceImpl) GetByAPIKey() (string, error) {
 func (impl *TelemetryServiceImpl) CheckWhitelist(ucid string) (bool, error) {
 	//todo - whitelisted ids
 	var whitelistedUcids []string
-	if strings.Contains(ucid, "devtron") {
+	if strings.Contains(ucid, devtronUCIDPrefix) {
 		return true, nil
 	} else if contains(whitelistedUcids, ucid) {
 		return true, nil
