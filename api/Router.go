@@ -35,4 +35,5 @@ func (r MuxRouter) Init() {
 	})
 
 	r.Router.Path("/devtron/telemetry/apikey").HandlerFunc(r.restHandler.GetApiKey).Methods("GET")
+	r.Router.Path("/devtron/telemetry/whitelist/check/{ucid}").HandlerFunc(r.restHandler.CheckWhitelist).Methods("GET")
 }

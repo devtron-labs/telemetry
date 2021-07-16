@@ -3,12 +3,14 @@ package api
 import (
 	"encoding/json"
 	"github.com/devtron-labs/telemetry/pkg/telemetry"
+	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 	"net/http"
 )
 
 type RestHandler interface {
 	GetApiKey(w http.ResponseWriter, r *http.Request)
+	CheckWhitelist(w http.ResponseWriter, r *http.Request)
 }
 
 func NewRestHandlerImpl(logger *zap.SugaredLogger,
@@ -67,13 +69,21 @@ type ResetRequest struct {
 }
 
 func (impl *RestHandlerImpl) GetApiKey(w http.ResponseWriter, r *http.Request) {
-
-	//TODO - authentication
-	setupResponse(&w, r)
-
 	result, err := impl.telemetryEventService.GetByAPIKey()
 	if err != nil {
 		impl.logger.Errorw("error on getting telemetry api key", "err", err)
+		impl.writeJsonResp(w, err, nil, http.StatusInternalServerError)
+		return
+	}
+	impl.writeJsonResp(w, err, result, 200)
+}
+
+func (impl *RestHandlerImpl) CheckWhitelist(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	ucid := vars["ucid"]
+	result, err := impl.telemetryEventService.CheckWhitelist(ucid)
+	if err != nil {
+		impl.logger.Errorw("error on checking white list for ucid", "err", err)
 		impl.writeJsonResp(w, err, nil, http.StatusInternalServerError)
 		return
 	}

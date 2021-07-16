@@ -4,10 +4,12 @@ import (
 	"github.com/devtron-labs/telemetry/internal/util"
 	"go.uber.org/zap"
 	"net/http"
+	"strings"
 )
 
 type TelemetryService interface {
 	GetByAPIKey() (string, error)
+	CheckWhitelist(ucid string) (bool, error)
 }
 
 type TelemetryServiceImpl struct {
@@ -28,4 +30,24 @@ func NewTelemetryServiceImpl(logger *zap.SugaredLogger, client *http.Client, pos
 func (impl *TelemetryServiceImpl) GetByAPIKey() (string, error) {
 	apiKey := impl.posthogConfig.PosthogApiKey
 	return apiKey, nil
+}
+
+func (impl *TelemetryServiceImpl) CheckWhitelist(ucid string) (bool, error) {
+	//todo - whitelisted ids
+	var whitelistedUcids []string
+	if strings.Contains(ucid, "devtron") {
+		return true, nil
+	} else if contains(whitelistedUcids, ucid) {
+		return true, nil
+	}
+	return false, nil
+}
+
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
