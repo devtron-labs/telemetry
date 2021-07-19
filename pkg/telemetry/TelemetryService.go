@@ -61,12 +61,3 @@ func (impl *TelemetryServiceImpl) CheckForOptOut(ucid string) (bool, error) {
 	}
 	return isOptOut, nil
 }
-
-func contains(s []string, e string) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
-}
