@@ -21,7 +21,11 @@ func InitializeApp() (*App, error) {
 	if err != nil {
 		return nil, err
 	}
-	telemetryServiceImpl := telemetry.NewTelemetryServiceImpl(sugaredLogger, client, posthogConfig)
+	optOutConfig, err := telemetry.GetOptOutConfig()
+	if err != nil {
+		return nil, err
+	}
+	telemetryServiceImpl := telemetry.NewTelemetryServiceImpl(sugaredLogger, client, posthogConfig, optOutConfig)
 	restHandlerImpl := api.NewRestHandlerImpl(sugaredLogger, telemetryServiceImpl)
 	muxRouter := api.NewMuxRouter(sugaredLogger, restHandlerImpl)
 	app := NewApp(muxRouter, sugaredLogger)
