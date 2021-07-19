@@ -1,0 +1,78 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Telemetry
+paths:
+  /devtron/telemetry/apikey:
+    get:
+      description: this api will return the encoded posthog api key.
+      parameters: [ ]
+      responses:
+        '200':
+          description: encoded posthog api key
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    description: status code
+                  status:
+                    type: string
+                    description: status
+                  result:
+                    type: string
+                    description: encoded posthog api key
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /devtron/telemetry/opt-out/{ucid}:
+    get:
+      description: this api will check weather unique client id (ucid) is opt-out or not.
+      parameters:
+        - name: ucid
+          in: path
+          description: check weather unique client id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: check weather unique client id
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    description: status code
+                  status:
+                    type: string
+                    description: status
+                  result:
+                    type: boolean
+                    description: flag return for ucid opt-out or not
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: Error code
+        message:
+          type: string
+          description: Error message

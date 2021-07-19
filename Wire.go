@@ -21,6 +21,7 @@ func InitializeApp() (*App, error) {
 		telemetry.NewTelemetryServiceImpl,
 		wire.Bind(new(telemetry.TelemetryService), new(*telemetry.TelemetryServiceImpl)),
 		util.GetPosthogConfig,
+		telemetry.GetOptOutConfig,
 	)
 	return &App{}, nil
 }

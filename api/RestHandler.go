@@ -3,12 +3,14 @@ package api
 import (
 	"encoding/json"
 	"github.com/devtron-labs/telemetry/pkg/telemetry"
+	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 	"net/http"
 )
 
 type RestHandler interface {
 	GetApiKey(w http.ResponseWriter, r *http.Request)
+	CheckForOptOut(w http.ResponseWriter, r *http.Request)
 }
 
 func NewRestHandlerImpl(logger *zap.SugaredLogger,
@@ -67,10 +69,6 @@ type ResetRequest struct {
 }
 
 func (impl *RestHandlerImpl) GetApiKey(w http.ResponseWriter, r *http.Request) {
-
-	//TODO - authentication
-	setupResponse(&w, r)
-
 	result, err := impl.telemetryEventService.GetByAPIKey()
 	if err != nil {
 		impl.logger.Errorw("error on getting telemetry api key", "err", err)
@@ -78,6 +76,18 @@ func (impl *RestHandlerImpl) GetApiKey(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	impl.writeJsonResp(w, err, result, 200)
+}
+
+func (impl *RestHandlerImpl) CheckForOptOut(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	ucid := vars["ucid"]
+	isOptOut, err := impl.telemetryEventService.CheckForOptOut(ucid)
+	if err != nil {
+		impl.logger.Errorw("error on checking ucid opt-out or not", "err", err)
+		impl.writeJsonResp(w, err, nil, http.StatusInternalServerError)
+		return
+	}
+	impl.writeJsonResp(w, err, isOptOut, 200)
 }
 
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
