@@ -9,7 +9,7 @@ import (
 )
 
 type TelemetryService interface {
-	GetByAPIKey() (string, error)
+	GetByAPIKey() (*util.PosthogConfig, error)
 	CheckForOptOut(ucid string) (bool, error)
 }
 
@@ -44,8 +44,8 @@ func NewTelemetryServiceImpl(logger *zap.SugaredLogger, client *http.Client, pos
 	return serviceImpl
 }
 
-func (impl *TelemetryServiceImpl) GetByAPIKey() (string, error) {
-	apiKey := impl.posthogConfig.PosthogApiKey
+func (impl *TelemetryServiceImpl) GetByAPIKey() (*util.PosthogConfig, error) {
+	apiKey := impl.posthogConfig
 	return apiKey, nil
 }
 
