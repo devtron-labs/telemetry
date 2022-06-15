@@ -64,6 +64,6 @@ func (impl *TelemetryServiceImpl) CheckForOptOut(ucid string) (bool, error) {
 }
 
 func (impl *TelemetryServiceImpl) GetByPosthogInfo() (*util.PosthogConfig, error) {
-	apiKey := impl.posthogConfig
-	return apiKey, nil
+	posthogInfo := impl.posthogConfig
+	return posthogInfo, nil
 }
