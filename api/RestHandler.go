@@ -11,6 +11,7 @@ import (
 type RestHandler interface {
 	GetApiKey(w http.ResponseWriter, r *http.Request)
 	CheckForOptOut(w http.ResponseWriter, r *http.Request)
+	GetPostHogInfo(w http.ResponseWriter, r *http.Request)
 }
 
 func NewRestHandlerImpl(logger *zap.SugaredLogger,
@@ -95,4 +96,14 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 	(*w).Header().Set("Content-Type", "text/html; charset=utf-8")
+}
+
+func (impl *RestHandlerImpl) GetPostHogInfo(w http.ResponseWriter, r *http.Request) {
+	result, err := impl.telemetryEventService.GetByPosthogInfo()
+	if err != nil {
+		impl.logger.Errorw("error on getting telemetry api key", "err", err)
+		impl.writeJsonResp(w, err, nil, http.StatusInternalServerError)
+		return
+	}
+	impl.writeJsonResp(w, err, result, 200)
 }

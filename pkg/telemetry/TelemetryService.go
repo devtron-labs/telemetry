@@ -11,6 +11,7 @@ import (
 type TelemetryService interface {
 	GetByAPIKey() (string, error)
 	CheckForOptOut(ucid string) (bool, error)
+	GetByPosthogInfo() (*util.PosthogConfig, error)
 }
 
 type OptOutConfig struct {
@@ -60,4 +61,9 @@ func (impl *TelemetryServiceImpl) CheckForOptOut(ucid string) (bool, error) {
 		}
 	}
 	return isOptOut, nil
+}
+
+func (impl *TelemetryServiceImpl) GetByPosthogInfo() (*util.PosthogConfig, error) {
+	posthogInfo := impl.posthogConfig
+	return posthogInfo, nil
 }
