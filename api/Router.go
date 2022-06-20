@@ -36,4 +36,5 @@ func (r MuxRouter) Init() {
 
 	r.Router.Path("/devtron/telemetry/apikey").HandlerFunc(r.restHandler.GetApiKey).Methods("GET")
 	r.Router.Path("/devtron/telemetry/opt-out/{ucid}").HandlerFunc(r.restHandler.CheckForOptOut).Methods("GET")
+	r.Router.Path("/devtron/telemetry/posthogInfo").HandlerFunc(r.restHandler.GetPostHogInfo).Methods("GET")
 }
