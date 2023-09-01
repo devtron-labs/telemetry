@@ -19,7 +19,7 @@ wire:
 	wire
 
 clean:
-	rm -f telemetry
+	rm -rf telemetry
 
 run: build
 	./telemetry
