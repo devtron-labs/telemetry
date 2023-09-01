@@ -2,7 +2,7 @@ FROM golang:1.12.6-alpine3.9 AS build-env
 
 RUN apk add --no-cache git gcc musl-dev
 RUN apk add --update make
-RUN go get github.com/google/wire/cmd/wire
+RUN go install github.com/google/wire/cmd/wire@latest
 WORKDIR /go/src/github.com/devtron-labs/telemetry
 ADD . /go/src/github.com/devtron-labs/telemetry
 RUN GOOS=linux make
