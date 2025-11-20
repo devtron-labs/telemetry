@@ -1,6 +1,6 @@
 module github.com/devtron-labs/telemetry
 
-go 1.22.3
+go 1.24.0
 
 require (
 	github.com/caarlos0/env v3.5.0+incompatible
@@ -16,6 +16,6 @@ require (
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.34.2 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
-	golang.org/x/crypto v0.27.0 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
 	mellium.im/sasl v0.3.2 // indirect
 )
